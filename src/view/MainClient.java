@@ -14,7 +14,7 @@ public class MainClient {
 //	}
 	
 	public static void main(String[] args) {
-		FormLogin f = new FormLogin();
-		f.show();
+//		new FormLogin();
+		new IPServerSelection();
 	}
 }

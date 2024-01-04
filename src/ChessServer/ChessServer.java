@@ -101,6 +101,7 @@ class Match {
 public class ChessServer {
 	Vector<ClientProcessing> playerList = new Vector<ClientProcessing>();
 	ArrayList<Match> matchList = new ArrayList<Match>();
+	ArrayList<String> listName = new ArrayList<String>();
 	ServerSocket server;
 	
 	public static void main(String[] args) throws Exception {
@@ -114,28 +115,42 @@ public class ChessServer {
 	public void startServer() {
 		try {
 			server = new ServerSocket(4444);
-			System.out.println("server run 4444");
-			while (true) {
-				try {
-					Socket soc = server.accept();
-					ClientProcessing t = new ClientProcessing(soc, this);
-					playerList.add(t);
-					t.start();
-					GUI_Server.serverManagerForm.updateServer1(getClientsAddress());
-					if (playerList.size() % 2 == 0) { // du 2 nguoi moi gui ma tran so
-						Match match = new Match(playerList.get(playerList.size()-2), playerList.get(playerList.size()-1));
-						match.playerVector.add(playerList.get(playerList.size()-2));
-						match.playerVector.add(playerList.get(playerList.size()-1));
-						matchList.add(match);
-						setColorPlayer(match);
-						match.addPieces();
-//						break;
+			System.out.println("Server 1 is running on port 4444");
+//			Thread threadA = new Thread(() -> {
+				while (!server.isClosed()) {
+					try {
+						Socket soc = server.accept();
+						
+						DataInputStream dis = new DataInputStream(soc.getInputStream());
+						String namePlayer = dis.readUTF();
+						System.out.println("Get name cua server: " + namePlayer);
+						listName.add(namePlayer);
+						System.out.println("listName leng:" + listName.size());
+						
+						ClientProcessing t = new ClientProcessing(soc, this);
+						playerList.add(t);
+						
+						GUI_Server.serverManagerForm.updateServer1(getClientsAddress());
+						if (playerList.size() % 2 == 0) { // du 2 nguoi moi gui ma tran so
+							Match match = new Match(playerList.get(playerList.size()-2), playerList.get(playerList.size()-1));
+							match.playerVector.add(playerList.get(playerList.size()-2));
+							match.playerVector.add(playerList.get(playerList.size()-1));
+							matchList.add(match);
+							setColorPlayer(match, listName.get(0), listName.get(1));
+							listName.clear();
+							match.addPieces();
+	//						break;
+						}
+						t.start();
+					} catch (Exception e1) {
+						System.out.println("Error 135" + e1.getMessage());
+						e1.printStackTrace();
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
 				}
-			}
+//	        });
+//			threadA.start();
 		} catch (Exception e) {
+			System.out.println("Error 140" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -143,10 +158,12 @@ public class ChessServer {
 	//
 	public void stopServer() { // stop accept connections
 		try {
-			server.close();
-			System.out.println("Server 1 stopped accepting connections");
+			if (server != null && !server.isClosed()) {
+				server.close();
+				System.out.println("Server 1 stopped accepting connections");
+			}
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Error 151" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -166,6 +183,7 @@ public class ChessServer {
 				try {
 					client.soc.close();
 				} catch (IOException e) {
+					System.out.println("Error 171" + e.getMessage());
 					e.printStackTrace();
 				}
 				playerList.remove(client);
@@ -185,22 +203,30 @@ public class ChessServer {
 			System.out.println("Server 1 closed all connections");
 			GUI_Server.serverManagerForm.updateServer1(getClientsAddress());
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Error 191" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	//
 	
-	public void setColorPlayer(Match match) {
+	public void setColorPlayer(Match match, String namePlayer1, String namePlayer2) {
 		try {
-//			DataOutputStream dos = new DataOutputStream(this.playerList.get(0).soc.getOutputStream());
+//			DataOutputStream dos = new DataOutputStream(match.player1.soc.getOutputStream());
+//			dos.writeUTF("You are white player");
+//			DataOutputStream dos2 = new DataOutputStream(match.player2.soc.getOutputStream());
+//			dos2.writeUTF("You are black player");
 			DataOutputStream dos = new DataOutputStream(match.player1.soc.getOutputStream());
+			System.out.println(namePlayer1 + "/" + namePlayer2);
 			dos.writeUTF("You are white player");
-//			DataOutputStream dos2 = new DataOutputStream(this.playerList.get(1).soc.getOutputStream());
+			dos.writeUTF(namePlayer1);
+			dos.writeUTF(namePlayer2);
+			
 			DataOutputStream dos2 = new DataOutputStream(match.player2.soc.getOutputStream());
 			dos2.writeUTF("You are black player");
-			
+			dos2.writeUTF(namePlayer2);
+			dos2.writeUTF(namePlayer1);
 		} catch (Exception e) {
+			System.out.println("Error 206" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -213,6 +239,7 @@ public class ChessServer {
 				dos2.writeUTF("-9999");
 				System.out.println(i + ":" + match.playerVector.get(i).soc.isClosed());
 			} catch (Exception e2) {
+				System.out.println("Error 219" + e2.getMessage());
 				e2.printStackTrace();
 			}
 		}
@@ -220,15 +247,23 @@ public class ChessServer {
 	
 	public void SendError2All(Match match) {
 		for (int j = 0; j < match.playerVector.size(); j++) {
-			try {
-				DataOutputStream dos = new DataOutputStream(match.playerVector.get(j).soc.getOutputStream());
-				dos.writeUTF("-9999");
-				dos.writeUTF("-9999");
-				dos.writeUTF("-9999");
-				dos.writeUTF("-9999");
-				
-			} catch (Exception e2) {
-				e2.printStackTrace();
+			System.out.println("Check null:" + match.playerVector.get(j) == null);
+			System.out.println("Check close:" + match.playerVector.get(j).soc.isClosed());
+			System.out.println("Check isInputShutdown:" + match.playerVector.get(j).soc.isInputShutdown());
+			System.out.println("Check isInputShutdown:" + match.playerVector.get(j).soc.isOutputShutdown());
+			
+			if (match.playerVector.get(j) != null && !match.playerVector.get(j).soc.isClosed()) {
+				try {
+					DataOutputStream dos = new DataOutputStream(match.playerVector.get(j).soc.getOutputStream());
+					dos.writeUTF("-9999");
+					dos.writeUTF("-9999");
+					dos.writeUTF("-9999");
+					dos.writeUTF("-9999");
+					
+				} catch (Exception e2) {
+					System.out.println("Error 236" + e2.getMessage());
+					e2.printStackTrace();
+				}
 			}
 		}
 	}
@@ -569,17 +604,22 @@ class ClientProcessing extends Thread {
 								dos.writeUTF(newRow + "");
 								System.out.println("Da gui: " + col + "," + row + "," + newCol + "," + newRow);
 							} catch (Exception e) {
+								System.out.println("Error 579" + e.getMessage());
 								e.printStackTrace();
 							}
 						}
 					}
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				System.out.println(this.soc.getInetAddress().getHostAddress() + " DISCONNECTED");
+				this.server.playerList.remove(this);
+				System.out.println("Error 586" + e.getMessage());
 				System.out.println("1 client da ngat ket noi server 4444");
 				if (this == getMatch(soc).playerVector.get(0) || this == getMatch(soc).playerVector.get(1)) {
 					server.SendError2All(getMatch(soc));
+					getMatch(soc).playerVector.remove(this);
 				}
+				GUI_Server.serverManagerForm.updateServer1(server.getClientsAddress());
 				break;
 			}
 		}

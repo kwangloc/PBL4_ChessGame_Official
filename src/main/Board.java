@@ -633,6 +633,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import GUI_Client.PlayerSession;
 import GUI_Client.inMatchWithPlayer;
 import pieces.Bishop;
 import pieces.King;
@@ -650,6 +651,8 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 	public int rows = 8;
 	public int off = 150;
 	
+	public Color whiteSquare = new Color(227, 198, 181);
+	public Color blackSquare = new Color(157, 105, 53);
 	
 	ArrayList<Piece> pieceList = new ArrayList<>();
 	public Piece selectedPiece; // the piece that you're moving
@@ -657,14 +660,14 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 	public CheckScanner checkScanner = new CheckScanner(this); // #7
 	public int enPassantTile = -1;
 	
-	
 	BufferedImage image;
 	Graphics g;
-	
-	//
+
 	public Socket socket;
-	//
 	
+	public String myName;
+	public String optName;
+	//
 	public boolean isWhitePlayer;
 //	public static void main(String[] args) {
 //		new Board();
@@ -711,6 +714,13 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 //			this.soc = new Socket("localhost", 4567);
 			System.out.println(ipServer + "," + portServer);
 			this.socket = new Socket(ipServer, portServer);
+			
+			PlayerSession playerSession = PlayerSession.getExistedInstance();
+			String name = playerSession.getNamePlayer(playerSession.idPlayer);
+			System.out.println(isWhitePlayer + " Gui ten cho server: " + name);
+			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+			dos.writeUTF(name);
+			
 			Thread t = new Thread(this); // luồng theo dõi tín hiệu từ server
 			t.start();
 		} catch (Exception e) {
@@ -724,11 +734,21 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 		// set color player (white or black)
 		try {
 			DataInputStream dis = new DataInputStream(socket.getInputStream());
-			if((dis.readUTF()).equals("You are white player")) {
+			//
+			String colorPlayer = dis.readUTF();
+			if(colorPlayer.equals("You are white player")) {
 				isWhitePlayer = true;
 			} else {
 				isWhitePlayer = false;
 			}
+			String yourName = dis.readUTF();
+			String opponentName = dis.readUTF();
+			System.out.println((isWhitePlayer ? "White" : "Black") +", yourName: "+yourName+", opponentName: "+opponentName);
+			
+			this.myName = yourName;
+			this.optName = opponentName;
+			
+			parentJFrame.putNamePlayer(myName, optName);
 			addPieces();
 			repaint();
 		} catch (Exception e) {
@@ -792,7 +812,11 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 			}
 		}
 	}
-	
+	public  void updateTheme(Color whiteSquare, Color blackSquare) {
+		this.whiteSquare = whiteSquare;
+		this.blackSquare = blackSquare;
+		this.repaint();
+	}
 	public void requestDraw() {
 		try {
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
@@ -1128,7 +1152,8 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 		// paint board
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
-				g2d.setColor((c + r)%2 == 0 ? new Color(227, 198, 181):new Color(157, 105, 53));
+//				g2d.setColor((c + r)%2 == 0 ? new Color(227, 198, 181):new Color(157, 105, 53));
+				g2d.setColor((c + r)%2 == 0 ? whiteSquare:blackSquare);
 				g2d.fillRect(c*tileSize, r*tileSize, tileSize, tileSize);
 			}
 		}

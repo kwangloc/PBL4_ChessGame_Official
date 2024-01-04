@@ -33,7 +33,7 @@ public class ChessServer3 {
 		try {
 			server = new ServerSocket(8888);
 			System.out.println("Server 3 is runnning on port 8888");
-			while (true) {
+			while (!server.isClosed()) {
 				try {
 					Socket socket = server.accept();
 					DataInputStream dis = new DataInputStream(socket.getInputStream());	

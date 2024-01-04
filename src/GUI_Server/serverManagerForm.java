@@ -56,6 +56,11 @@ public class serverManagerForm extends JFrame {
 	static DefaultComboBoxModel<String> comboBoxModelDB = new DefaultComboBoxModel<>();
 	static JLabel lblServerDBNoti;
 	
+	public Thread thread;
+	public Thread thread2;
+	public Thread thread3;
+	public Thread threadDB;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -74,24 +79,24 @@ public class serverManagerForm extends JFrame {
 	 */
 	public serverManagerForm() {
 		chessServer = new ChessServer();
-		Thread thread = new Thread(() -> {
-            chessServer.startServer();
-        });
+//		Thread thread = new Thread(() -> {
+//            chessServer.startServer();
+//        });
 		
 		chessServer2 = new ChessServer2();
-		Thread thread2 = new Thread(() -> {
-            chessServer2.startServer();
-        });
+//		Thread thread2 = new Thread(() -> {
+//            chessServer2.startServer();
+//        });
 		
 		chessServer3 = new ChessServer3();
-		Thread thread3 = new Thread(() -> {
-            chessServer3.startServer();
-        });
+//		Thread thread3 = new Thread(() -> {
+//            chessServer3.startServer();
+//        });
 		
 		chessServerDB = new ConnectDBServer();
-		Thread threadDB = new Thread(() -> {
-			chessServerDB.startServer();
-        });
+//		Thread threadDB = new Thread(() -> {
+//			chessServerDB.startServer();
+//        });
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1600, 900);
@@ -184,6 +189,9 @@ public class serverManagerForm extends JFrame {
 		JButton btnServer1Start = new JButton("Start");
 		btnServer1Start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				thread = new Thread(() -> {
+		            chessServer.startServer();
+		        });
 		        thread.start();
 		        lblServer1Sta.setText("running");
 		        lblServer1Sta.setForeground(Color.GREEN);
@@ -199,7 +207,10 @@ public class serverManagerForm extends JFrame {
 		JButton btnServer1Stop = new JButton("Stop");
 		btnServer1Stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+//				thread.ter
 				chessServer.stopServer();
+				lblServer1Sta.setText("Off");
+		        lblServer1Sta.setForeground(Color.RED);
 			}
 		});
 		btnServer1Stop.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -212,6 +223,7 @@ public class serverManagerForm extends JFrame {
 		btnServer1CloseAllConnections.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chessServer.closeAllConnections();
+				lblServer1Noti.setText("Closed all connections");
 			}
 		});
 		btnServer1CloseAllConnections.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -223,6 +235,12 @@ public class serverManagerForm extends JFrame {
 		JButton btnServer2Start = new JButton("Start");
 		btnServer2Start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+//		        thread2.start();
+//		        lblServer2Sta.setText("running");
+//		        lblServer2Sta.setForeground(Color.GREEN);
+		        thread2 = new Thread(() -> {
+		            chessServer2.startServer();
+		        });
 		        thread2.start();
 		        lblServer2Sta.setText("running");
 		        lblServer2Sta.setForeground(Color.GREEN);
@@ -237,6 +255,8 @@ public class serverManagerForm extends JFrame {
 		btnServer2Stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chessServer2.stopServer();
+				lblServer2Sta.setText("Off");
+		        lblServer2Sta.setForeground(Color.RED);
 			}
 		});
 		btnServer2Stop.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -249,6 +269,7 @@ public class serverManagerForm extends JFrame {
 		btnServer2CloseAllConnections.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chessServer2.closeAllConnections();
+				lblServer2Noti.setText("Closed all connections");
 			}
 		});
 		btnServer2CloseAllConnections.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -296,7 +317,13 @@ public class serverManagerForm extends JFrame {
 		JButton btnServer3Start = new JButton("Start");
 		btnServer3Start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				thread3.start();
+//				thread3.start();
+//		        lblServer3Sta.setText("running");
+//		        lblServer3Sta.setForeground(Color.GREEN);
+		        thread3 = new Thread(() -> {
+		            chessServer3.startServer();
+		        });
+		        thread3.start();
 		        lblServer3Sta.setText("running");
 		        lblServer3Sta.setForeground(Color.GREEN);
 			}
@@ -310,6 +337,8 @@ public class serverManagerForm extends JFrame {
 		btnServer3Stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chessServer3.stopServer();
+				lblServer3Sta.setText("Off");
+		        lblServer3Sta.setForeground(Color.RED);
 			}
 		});
 		btnServer3Stop.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -352,6 +381,7 @@ public class serverManagerForm extends JFrame {
 		btnServer3CloseAllConnections.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chessServer3.closeAllConnections();
+				lblServer3Noti.setText("Closed all connections");
 			}
 		});
 		btnServer3CloseAllConnections.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -398,7 +428,13 @@ public class serverManagerForm extends JFrame {
 		JButton btnServerDBStart = new JButton("Start");
 		btnServerDBStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				threadDB.start();
+//				threadDB.start();
+//		        lblServerDBSta.setText("running");
+//		        lblServerDBSta.setForeground(Color.GREEN);
+		        threadDB = new Thread(() -> {
+		            chessServerDB.startServer();
+		        });
+		        threadDB.start();
 		        lblServerDBSta.setText("running");
 		        lblServerDBSta.setForeground(Color.GREEN);
 			}
@@ -412,6 +448,8 @@ public class serverManagerForm extends JFrame {
 		btnServerDBStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chessServerDB.stopServer();
+				lblServerDBSta.setText("Off");
+		        lblServerDBSta.setForeground(Color.RED);
 			}
 		});
 		btnServerDBStop.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -454,6 +492,7 @@ public class serverManagerForm extends JFrame {
 		btnServerDBCloseAllConnections.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chessServerDB.closeAllConnections();
+				lblServerDBNoti.setText("Closed all connections");
 			}
 		});
 		btnServerDBCloseAllConnections.setFont(new Font("Arial", Font.PLAIN, 20));

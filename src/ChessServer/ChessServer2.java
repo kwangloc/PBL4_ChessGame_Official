@@ -40,13 +40,18 @@ public class ChessServer2 {
 		try {
 			server = new ServerSocket(6666);
 			System.out.println("Server 2 is running on port 6666");
-			while(true) {
+			while(!server.isClosed()) {
 				try {
 					Socket soc = server.accept();
+					//
+					DataInputStream dis = new DataInputStream(soc.getInputStream());
+					String namePlayer = dis.readUTF();
+					System.out.println("Get name cua Server:" + namePlayer);
+					//
 					ClientProcessing2 t = new ClientProcessing2(soc, this);
 					playerList.add(t);
 					t.start();
-					setColorAIMode(soc);
+					setColorAIMode(soc, namePlayer);
 					GUI_Server.serverManagerForm.updateServer2(getClientsAddress());
 //					if (playerList.size() == 1) { 
 //						setColorAIMode();
@@ -120,10 +125,12 @@ public class ChessServer2 {
 //			
 //		}
 //	}
-	public void setColorAIMode(Socket soc) {
+	public void setColorAIMode(Socket soc, String namePlayer) {
 		try {
 			DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
 			dos.writeUTF("You are white player");
+			dos.writeUTF(namePlayer);
+			dos.writeUTF("AI Engine");
 		} catch (Exception e) {
 			
 		}
@@ -215,7 +222,7 @@ public class ChessServer2 {
 	// chess engine
 	public int[] chessEngine(String listMoves) {
 		// AI
-		String stockfishPath = "D:/JDBC/chessEngine/stockfish-windows-x86-64-modern/stockfish/stockfish-windows-x86-64-modern.exe";
+		String stockfishPath = "A:/Apps/stockfish-windows-x86-64-modern/stockfish/stockfish-windows-x86-64-modern.exe";
 		try {
 			Process stockfishProcess = Runtime.getRuntime().exec(stockfishPath);
 			OutputStream stockfishInput = stockfishProcess.getOutputStream();

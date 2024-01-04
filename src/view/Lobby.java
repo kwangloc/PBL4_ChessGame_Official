@@ -17,7 +17,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class Lobby extends JFrame {
-
+	public String serverAddress;
 	private JPanel contentPane;
 	public JButton btnStart;
 //	private FormListRoom formListRoom;
@@ -42,7 +42,8 @@ public class Lobby extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Lobby(int id) {
+	public Lobby(int id, String serverAddress) {
+		this.serverAddress = serverAddress;
 		idRoom = id;
 		setTitle(id+"");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,7 +71,7 @@ public class Lobby extends JFrame {
 				PlayerSession playerSession = PlayerSession.getExistedInstance();
 				playerSession.kickOffMatch(id);
 				
-				new inMatchWithPlayer(id, "localhost", 4444);
+				new inMatchWithPlayer(id, serverAddress, 4444);
 			}
 		});
 		btnStart.setBackground(new Color(173, 255, 47));
@@ -110,7 +111,7 @@ public class Lobby extends JFrame {
 					PlayerSession playerSession = PlayerSession.getExistedInstance();
 					playerSession.exitRoom(id);
 					List<String> listRoom = playerSession.requestGetRoomList();
-					FormListRoom room = new FormListRoom(listRoom);
+					FormListRoom room = new FormListRoom(listRoom, serverAddress);
 					room.show();
 					
 				} catch (Exception e2) {

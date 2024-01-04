@@ -19,7 +19,7 @@ import GUI_Client.selectMode;
 import connectDB.Room;
 
 public class FormListRoom extends JFrame {
-
+	public String serverAddress;
 	private JPanel contentPane;
 	public List<Room> listRoom;
 	public int id_room;
@@ -44,12 +44,14 @@ public class FormListRoom extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormListRoom(List<String> listRoomStr) {
+	public FormListRoom(List<String> listRoomStr, String serverAddress) {
+		this.serverAddress = serverAddress;
 		setTitle("List Room");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 889, 608);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(64, 128, 128));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
@@ -123,11 +125,10 @@ public class FormListRoom extends JFrame {
 			btnRoom.setFont(new Font("Tahoma", Font.PLAIN, 24));
 			
 			if (room.isStatusRoom()) {
-				btnRoom.setBackground(Color.RED);
+				btnRoom.setBackground(new Color(255, 128, 128));
 			} else {
-				btnRoom.setBackground(Color.GREEN);
+				btnRoom.setBackground(new Color(128, 128, 255));
 			}
-			
 			btnRoom.addActionListener(new ActionListener() {
 				
 				@Override
@@ -166,7 +167,7 @@ public class FormListRoom extends JFrame {
 							
 							PlayerSession playerSession = PlayerSession.getExistedInstance();
 							playerSession.enterRoom(id_room);
-							Lobby lobby = new Lobby(id_room);
+							Lobby lobby = new Lobby(id_room, serverAddress);
 //							if (room.getPlayerNumber() < 2) {
 //								lobby.btnStart.setEnabled(false);
 //							}
@@ -193,7 +194,7 @@ public class FormListRoom extends JFrame {
 				dispose();
 //				HomePage home = new HomePage();
 //				home.show();
-				new selectMode();
+				new selectMode(serverAddress);
 			}
 		});
 		panel.add(btnReturnHome);

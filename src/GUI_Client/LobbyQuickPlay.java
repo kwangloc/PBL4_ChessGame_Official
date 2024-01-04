@@ -22,14 +22,13 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class LobbyQuickPlay extends JFrame implements Runnable {
-
 	private JPanel contentPane;
 	private Timer timer;
 	private int seconds;
 	private JLabel lblNotification;
 	private JButton btnStartGame;
-	String ipServer;
-	int portServer;
+	public String ipServer;
+	public int portServer;
 	
 	Socket socket;
 	
@@ -60,18 +59,21 @@ public class LobbyQuickPlay extends JFrame implements Runnable {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(135, 206, 250));
+		contentPane.setBackground(new Color(64, 128, 128));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblContent = new JLabel("Waiting for other player...");
+		lblContent.setForeground(new Color(255, 255, 255));
+		lblContent.setBackground(new Color(255, 255, 255));
 		lblContent.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblContent.setBounds(169, 95, 237, 37);
 		contentPane.add(lblContent);
 		
 		JLabel lblCountTimer = new JLabel("00:00:00");
+		lblCountTimer.setForeground(new Color(255, 255, 255));
 		lblCountTimer.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCountTimer.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblCountTimer.setBounds(169, 152, 237, 31);
@@ -83,8 +85,9 @@ public class LobbyQuickPlay extends JFrame implements Runnable {
 		lblNotification.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNotification.setHorizontalAlignment(SwingConstants.CENTER);
 		btnStartGame = new JButton("Start");
+		btnStartGame.setForeground(new Color(255, 255, 255));
 		btnStartGame.setBounds(250, 280, 100, 40);
-		btnStartGame.setBackground(Color.GREEN);
+		btnStartGame.setBackground(new Color(255, 128, 128));
 		btnStartGame.setVisible(false);
 		btnStartGame.addActionListener(new ActionListener() {
 			
@@ -163,7 +166,7 @@ public class LobbyQuickPlay extends JFrame implements Runnable {
 				System.out.println(e.getMessage()+"\tLoi khong gui tin nhan duoc tu Client -> Server");
 				JOptionPane.showMessageDialog(this ,"Lost connection to server!");
 				this.dispose();
-				new selectMode();
+				new selectMode(ipServer);
 				break;
 			}
 		}

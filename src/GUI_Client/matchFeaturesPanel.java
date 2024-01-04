@@ -5,8 +5,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -22,11 +25,14 @@ public class matchFeaturesPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public matchFeaturesPanel() {
+//		setBackground(new Color(255, 255, 255));
 		setLayout(null);
 		
 		textArea = new JTextArea();
+		textArea.setForeground(new Color(255, 255, 255));
+		textArea.setBackground(new Color(64, 128, 128));
 		textArea.setEditable(false);
-		textArea.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		textArea.setFont(new Font("Arial", Font.BOLD, 20));
 		textArea.setBounds(36, 437, 528, 194);
 //		add(textArea);
 		
@@ -42,6 +48,8 @@ public class matchFeaturesPanel extends JPanel {
 		textField.setColumns(10);
 		
 		btnNewButton = new JButton("Send");
+		btnNewButton.setForeground(new Color(255, 255, 255));
+		btnNewButton.setBackground(new Color(255, 128, 128));
 //		btnNewButton.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent e) {
 //				PlayerSession playerSession = PlayerSession.getExistedInstance();
@@ -58,9 +66,9 @@ public class matchFeaturesPanel extends JPanel {
 		
 		textArea_1 = new JTextArea();
 		textArea_1.setEditable(false);
-		textArea_1.setFont(new Font("Monospaced", Font.BOLD, 20));
+		textArea_1.setFont(new Font("Arial", Font.BOLD, 20));
 		textArea_1.setForeground(new Color(255, 255, 255));
-		textArea_1.setBackground(new Color(128, 128, 128));
+		textArea_1.setBackground(new Color(64, 128, 128));
 		textArea_1.setBounds(36, 49, 528, 194);
 //		add(textArea_1);
 		
@@ -78,7 +86,14 @@ public class matchFeaturesPanel extends JPanel {
 		lblChat.setFont(new Font("Arial", Font.BOLD, 24));
 		lblChat.setBounds(36, 398, 193, 29);
 		add(lblChat);
-		
+	
+		// BG
+		// Background image
+        ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("/res/v7.jpg")); // Replace with the actual path to your image
+        JLabel backgroundLabel = new JLabel(backgroundIcon);
+        backgroundLabel.setBounds(0, 0, 580, 700);
+        add(backgroundLabel);
+        setSize(backgroundIcon.getIconWidth(), backgroundIcon.getIconHeight());
 //		this.setVisible(true);
 	}
 	

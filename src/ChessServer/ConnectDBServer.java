@@ -27,7 +27,7 @@ public class ConnectDBServer {
 		try {
 			server = new ServerSocket(5678);
 			System.out.println("Server DB is runnning on port 5678");
-			while (true) {
+			while (!server.isClosed()) {
 				try {
 					socket = server.accept();				
 					ClientRequestDB client = new ClientRequestDB(socket, this);

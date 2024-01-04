@@ -32,7 +32,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class FormLogin extends JFrame {
-
+	public String serverAddress;
+	
 	private JPanel contentPane;
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
@@ -60,10 +61,12 @@ public class FormLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormLogin() {
+	public FormLogin(String serverAddress) {
+		this.serverAddress = serverAddress;
+		
 		setTitle("Login Form");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 940, 614);
+		setBounds(100, 100, 1600, 900);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -72,14 +75,14 @@ public class FormLogin extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panelLogin = new JPanel();
-		panelLogin.setBackground(new Color(0, 0, 0, 80));
-		panelLogin.setBounds(100, 83, 737, 458);
+		panelLogin.setBackground(new Color(64, 128, 128));
+		panelLogin.setBounds(426, 180, 737, 458);
 		contentPane.add(panelLogin);
 		panelLogin.setLayout(null);
 		
 		JPanel panelSignUp = new JPanel();
 		panelSignUp.setBackground(new Color(0, 0, 0, 80));
-		panelSignUp.setBounds(837, 83, 1, 458);
+		panelSignUp.setBounds(919, 83, -245, 458);
 		contentPane.add(panelSignUp);
 		panelSignUp.setLayout(null);
 		
@@ -171,7 +174,7 @@ public class FormLogin extends JFrame {
 		panelSignUp.add(lblReturnLogin);
 		
 		JLabel lblLogin = new JLabel("LOGIN");
-		lblLogin.setForeground(Color.BLUE);
+		lblLogin.setForeground(new Color(255, 255, 255));
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLogin.setBounds(275, 10, 174, 60);
 		lblLogin.setFont(new Font("Tahoma", Font.BOLD, 30));
@@ -207,6 +210,7 @@ public class FormLogin extends JFrame {
 		panelLogin.add(passwordField);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setForeground(new Color(0, 0, 0));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -264,10 +268,10 @@ public class FormLogin extends JFrame {
 					String username = textFieldUsername.getText();
 					String password = passwordField.getText();
 					
-					PlayerSession playerSession = PlayerSession.getInstance(username, "localhost", 5678);
+					PlayerSession playerSession = PlayerSession.getInstance(username, serverAddress, 5678);
 					if (playerSession.checkExistedPlayer(username, password)) {
 						dispose();
-						new selectMode();
+						new selectMode(serverAddress);
 					}
 					else {
 						JOptionPane.showMessageDialog(contentPane, "Login Failed");
@@ -279,7 +283,7 @@ public class FormLogin extends JFrame {
 				}
 			}
 		});
-		btnLogin.setBackground(new Color(30, 144, 255));
+		btnLogin.setBackground(new Color(255, 255, 255));
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnLogin.setBounds(275, 352, 174, 34);
 		panelLogin.add(btnLogin);
@@ -300,15 +304,12 @@ public class FormLogin extends JFrame {
 			}
 		});
 		lblSignUp.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSignUp.setForeground(Color.GREEN);
+		lblSignUp.setForeground(new Color(0, 0, 0));
 		lblSignUp.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblSignUp.setBounds(170, 396, 399, 40);
 		panelLogin.add(lblSignUp);
-		
-		JLabel lblBackground = new JLabel("");
-		lblBackground.setIcon(new ImageIcon(FormLogin.class.getResource("/res/background.png")));
-		lblBackground.setBounds(10, 10, 906, 557);
-		contentPane.add(lblBackground);
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 	
 	private void moveToSignUp(JPanel panelSignUp, JPanel panelLogin) {
