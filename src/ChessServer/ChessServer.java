@@ -5,9 +5,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Vector;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import pieceServer.Bishop;
 import pieceServer.King;
@@ -104,6 +110,7 @@ public class ChessServer {
 	ArrayList<String> listName = new ArrayList<String>();
 	ServerSocket server;
 	
+	public static SecretKey secretKey = new SecretKeySpec("MySecretKey12345".getBytes(), "AES");
 	public static void main(String[] args) throws Exception {
 		new ChessServer();
 	}
@@ -111,6 +118,23 @@ public class ChessServer {
 	public ChessServer() {
 //		addPieces();
 	}
+	public String decryptMessage(String encryptedMessage) {
+   	 // Create Cipher instance for decryption
+	   	try {
+	   		System.out.println("Message from client: " + encryptedMessage);
+	   		Cipher cipher = Cipher.getInstance("AES");
+	   		byte[] encryptedBytes = Base64.getDecoder().decode(encryptedMessage);
+	
+	           cipher.init(Cipher.DECRYPT_MODE, secretKey);
+	           byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+	           String decryptedMessage = new String(decryptedBytes, StandardCharsets.UTF_8);
+	           System.out.println("Message after decrypted: " + decryptedMessage);
+	           return decryptedMessage;
+			} catch (Exception e) {
+				
+			}
+       return null;
+   }
 	
 	public void startServer() {
 		try {
@@ -467,10 +491,14 @@ class ClientProcessing extends Thread {
 		while (true) {
 			try {
 				DataInputStream dis = new DataInputStream(soc.getInputStream()); // loi khi ngat ket noi
-				int col = Integer.parseInt(dis.readUTF());
-				int row = Integer.parseInt(dis.readUTF());
-				int newCol = Integer.parseInt(dis.readUTF());
-				int newRow = Integer.parseInt(dis.readUTF());
+//				int col = Integer.parseInt(dis.readUTF());
+//				int row = Integer.parseInt(dis.readUTF());
+//				int newCol = Integer.parseInt(dis.readUTF());
+//				int newRow = Integer.parseInt(dis.readUTF());
+				int col = Integer.parseInt(server.decryptMessage(dis.readUTF()));
+				int row = Integer.parseInt(server.decryptMessage(dis.readUTF()));
+				int newCol = Integer.parseInt(server.decryptMessage(dis.readUTF()));
+				int newRow = Integer.parseInt(server.decryptMessage(dis.readUTF()));
 				System.out.println(col + "," + row + "," + newCol + "," + newRow);
 				
 				if (!isContainedInMatch(soc)) {

@@ -627,8 +627,13 @@ import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -673,6 +678,21 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 //		new Board();
 //		
 //	}
+	public static SecretKey secretKey = new SecretKeySpec("MySecretKey12345".getBytes(), "AES");
+	public String encryptMessage(String originalMessage) {
+	   	 // Create Cipher instance for decryption
+	   	try {
+	   		Cipher cipher = Cipher.getInstance("AES");
+	   		byte[] plaintext = originalMessage.getBytes(StandardCharsets.UTF_8);
+	   		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedMessage = cipher.doFinal(plaintext);
+	   		String encryptedBase64 = Base64.getEncoder().encodeToString(encryptedMessage);
+	        return encryptedBase64;
+			} catch (Exception e) {
+				
+			}
+	       return null;
+	   }
 	public Board(String ipServer, int portServer, inMatchWithPlayer parentJFrame) {
 		this.parentJFrame = parentJFrame;
 		
@@ -821,10 +841,14 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 		try {
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			
-			dos.writeUTF("-8888");
-			dos.writeUTF("-8888");
-			dos.writeUTF("-8888");
-			dos.writeUTF("-8888");
+//			dos.writeUTF("-8888");
+//			dos.writeUTF("-8888");
+//			dos.writeUTF("-8888");
+//			dos.writeUTF("-8888");
+			dos.writeUTF(encryptMessage("-8888"));
+			dos.writeUTF(encryptMessage("-8888"));
+			dos.writeUTF(encryptMessage("-8888"));
+			dos.writeUTF(encryptMessage("-8888"));
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\tKhong the gui yeu cau xin hoa");
@@ -839,10 +863,14 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 				
 				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 				
-				dos.writeUTF("-8885");
-				dos.writeUTF("-8885");
-				dos.writeUTF("-8885");
-				dos.writeUTF("-8885");
+//				dos.writeUTF("-8885");
+//				dos.writeUTF("-8885");
+//				dos.writeUTF("-8885");
+//				dos.writeUTF("-8885");
+				dos.writeUTF(encryptMessage("-8885"));
+				dos.writeUTF(encryptMessage("-8885"));
+				dos.writeUTF(encryptMessage("-8885"));
+				dos.writeUTF(encryptMessage("-8885"));
 				
 				this.parentJFrame.quitMatch(this.parentJFrame.idRoom);
 			}
@@ -858,12 +886,17 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 		try {
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			
-			dos.writeUTF("-8880");
-			dos.writeUTF("-8880");
-			dos.writeUTF("-8880");
-			dos.writeUTF("-8880");
-			dos.writeUTF(message);
+//			dos.writeUTF("-8880");
+//			dos.writeUTF("-8880");
+//			dos.writeUTF("-8880");
+//			dos.writeUTF("-8880");
+//			dos.writeUTF(message);
 			
+			dos.writeUTF(encryptMessage("-8880"));
+			dos.writeUTF(encryptMessage("-8880"));
+			dos.writeUTF(encryptMessage("-8880"));
+			dos.writeUTF(encryptMessage("-8880"));
+			dos.writeUTF(message);
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\tKhong the gui tin nhan cho doi phuong Loi 843");
 		}
@@ -1231,10 +1264,15 @@ public class Board extends JPanel implements MouseListener,MouseMotionListener,R
 				}
 				try {
 					DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-					dos.writeUTF(oldCol + "");
-					dos.writeUTF(oldRow + "");
-					dos.writeUTF(newCol + "");
-					dos.writeUTF(newRow + "");
+//					dos.writeUTF(oldCol + "");
+//					dos.writeUTF(oldRow + "");
+//					dos.writeUTF(newCol + "");
+//					dos.writeUTF(newRow + "");
+					
+					dos.writeUTF(encryptMessage(oldCol+ ""));
+					dos.writeUTF(encryptMessage(oldRow+ ""));
+					dos.writeUTF(encryptMessage(newCol+ ""));
+					dos.writeUTF(encryptMessage(newRow+ ""));
 				} catch (Exception e1) {
 					
 				}
