@@ -144,7 +144,7 @@ public class inMatchWithPlayer extends JFrame {
 		btnNewButton.setBackground(new Color(192, 192, 192));
 		btnNewButton.setBounds(348, 747, 45, 27);
 		contentPane.add(btnNewButton);
-		
+		// Draw
 		JButton btnDraw = new JButton("Draw");
 		btnDraw.setBackground(new Color(255, 128, 128));
 		btnDraw.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -155,7 +155,7 @@ public class inMatchWithPlayer extends JFrame {
 		});
 		btnDraw.setBounds(719, 743, 123, 32);
 		contentPane.add(btnDraw);
-		
+		// Quit
 		JButton btnQuit = new JButton("Quit");
 		btnQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -186,7 +186,7 @@ public class inMatchWithPlayer extends JFrame {
 			}
 		});
 		contentPane.add(matchFeaturesPanel);
-		// draw
+		// Draw Pane;
 		panelDraw = new JPanel();
 		panelDraw.setVisible(false);
 		panelDraw.setBounds(397, 743, 312, 50);
@@ -222,7 +222,7 @@ public class inMatchWithPlayer extends JFrame {
 		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 18));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelDraw.add(lblNewLabel_1);
-		
+		//
 		
 		setLocationRelativeTo(null);
 		//
@@ -330,54 +330,54 @@ public class inMatchWithPlayer extends JFrame {
 		btnNewButton.setBackground(new Color(192, 192, 192));
 		btnNewButton.setBounds(348, 747, 45, 27);
 		contentPane.add(btnNewButton);
-		// draw
-//		panelDraw = new JPanel();
-//		panelDraw.setBackground(new Color(211, 211, 211));
-//		panelDraw.setVisible(false);
-//		panelDraw.setBounds(125, 261, 356, 139);
-//		matchFeaturesPanel.add(panelDraw);
-//		panelDraw.setLayout(null);
-//		
-//		JButton btnYes = new JButton("Yes");
-//		btnYes.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				board.requestDraw();
-//				panelDraw.setVisible(false);
-//			}
-//		});
-//		btnYes.setBackground(new Color(0, 255, 0));
-//		btnYes.setFont(new Font("Arial", Font.PLAIN, 14));
-//		btnYes.setBounds(50, 97, 108, 32);
-//		panelDraw.add(btnYes);
-//		
-//		JButton btnNo = new JButton("No");
-//		btnNo.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				panelDraw.setVisible(false);
-//			}
-//		});
-//		btnNo.setFont(new Font("Arial", Font.PLAIN, 14));
-//		btnNo.setBackground(Color.GREEN);
-//		btnNo.setBounds(204, 97, 108, 32);
-//		panelDraw.add(btnNo);
-//		
-//		JLabel lblNewLabel_1 = new JLabel("Are you sure to draw?");
-//		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 18));
-//		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-//		lblNewLabel_1.setBounds(81, 33, 201, 32);
-//		panelDraw.add(lblNewLabel_1);
-//		
-//		JButton btnDraw = new JButton("Draw");
-//		btnDraw.setBackground(new Color(0, 191, 255));
-//		btnDraw.setFont(new Font("Tahoma", Font.PLAIN, 18));
-//		btnDraw.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				panelDraw.setVisible(true);
-//			}
-//		});
-//		btnDraw.setBounds(719, 743, 123, 32);
-//		contentPane.add(btnDraw);
+		// Draw
+		JButton btnDraw = new JButton("Draw");
+		btnDraw.setBackground(new Color(255, 128, 128));
+		btnDraw.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnDraw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelDraw.setVisible(true);
+			}
+		});
+		btnDraw.setBounds(719, 743, 123, 32);
+		contentPane.add(btnDraw);
+		// Draw panel
+		panelDraw = new JPanel();
+		panelDraw.setVisible(false);
+		panelDraw.setBounds(397, 743, 312, 50);
+		contentPane.add(panelDraw);
+		panelDraw.setBackground(new Color(211, 211, 211));
 		
+		JButton btnYes = new JButton("Yes");
+		btnYes.setBounds(134, 11, 81, 32);
+		btnYes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				board.requestDraw();
+				panelDraw.setVisible(false);
+			}
+		});
+		panelDraw.setLayout(null);
+		btnYes.setBackground(new Color(0, 255, 0));
+		btnYes.setFont(new Font("Arial", Font.PLAIN, 14));
+		panelDraw.add(btnYes);
+		
+		JButton btnNo = new JButton("No");
+		btnNo.setBounds(221, 11, 81, 32);
+		btnNo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelDraw.setVisible(false);
+			}
+		});
+		btnNo.setFont(new Font("Arial", Font.PLAIN, 14));
+		btnNo.setBackground(Color.GREEN);
+		panelDraw.add(btnNo);
+		
+		JLabel lblNewLabel_1 = new JLabel("Are you sure?");
+		lblNewLabel_1.setBounds(0, 10, 137, 32);
+		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		panelDraw.add(lblNewLabel_1);
+		// End Draw Panel
 		JButton btnQuit = new JButton("Quit");
 		btnQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
